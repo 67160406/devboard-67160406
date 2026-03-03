@@ -45,12 +45,12 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* ซ้าย */}
+        {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
           <PostList posts={POSTS} />
         </div>
 
-        {/* ขวา */}
+        {/* คอลัมน์ขวา: สมาชิก */}
         <div>
           <h2
             style={{

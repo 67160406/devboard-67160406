@@ -4,7 +4,7 @@ function PostCount({ count }) {
     <p
       style={{
         margin: "0.5rem 0 1.5rem",
-        color: "#4a5568",
+        color: "#8b99b0",
         fontSize: "0.9rem",
       }}
     >
