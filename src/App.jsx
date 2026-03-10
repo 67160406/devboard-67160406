@@ -8,22 +8,22 @@ const INITIAL_POSTS = [
   {
     id: 1,
     title: "React คืออะไร?",
-    body: "React เป็น library สำหรับสร้าง UI",
+    body: "React เป็น library สำหรับสร้าง UI ที่ทำให้ code อ่านง่ายและดูแลรักษาได้",
   },
   {
     id: 2,
     title: "ทำไมต้องใช้ Components?",
-    body: "Components ช่วยแบ่ง UI",
+    body: "Components ช่วยให้เราแบ่ง UI ออกเป็นชิ้นเล็ก ๆ ที่ reuse ได้",
   },
   {
     id: 3,
     title: "JSX คืออะไร?",
-    body: "JSX คือ syntax",
+    body: "JSX คือ syntax ที่ช่วยให้เราเขียน HTML ใน JavaScript ได้อย่างสะดวก",
   },
   {
     id: 4,
     title: "Props ทำงานอย่างไร?",
-    body: "Props คือ argument",
+    body: "Props คือ argument ที่ส่งให้ component เหมือนกับการส่งพารามิเตอร์ให้ฟังก์ชัน",
   },
 ];
 
@@ -56,12 +56,12 @@ function App() {
   }
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Navbar favoriteCount={favorites.length} />
 
       <div
         style={{
-          maxWidth: "900px",
+          maxWidth: "1100px",
           margin: "2rem auto",
           padding: "0 1rem",
           display: "grid",
