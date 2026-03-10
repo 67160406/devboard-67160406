@@ -1,29 +1,32 @@
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
+import AddPostForm from "./components/AddPostForm";
 
-const POSTS = [
+const INITIAL_POSTS = [
   {
     id: 1,
     title: "React คืออะไร?",
-    body: "React เป็น library สำหรับสร้าง UI ที่ทำให้ code อ่านง่ายและดูแลรักษาได้",
+    body: "React เป็น library สำหรับสร้าง UI",
   },
   {
     id: 2,
     title: "ทำไมต้องใช้ Components?",
-    body: "Components ช่วยให้เราแบ่ง UI ออกเป็นชิ้นเล็ก ๆ ที่ reuse ได้",
+    body: "Components ช่วยแบ่ง UI",
   },
   {
     id: 3,
     title: "JSX คืออะไร?",
-    body: "JSX คือ syntax ที่ช่วยให้เราเขียน HTML ใน JavaScript ได้อย่างสะดวก",
+    body: "JSX คือ syntax",
   },
   {
     id: 4,
     title: "Props ทำงานอย่างไร?",
-    body: "Props คือ argument ที่ส่งให้ component เหมือนกับการส่งพารามิเตอร์ให้ฟังก์ชัน",
+    body: "Props คือ argument",
   },
 ];
+
 const USERS = [
   { id: 1, name: "สมชาย ใจดี", email: "somchai@dev.com" },
   { id: 2, name: "สมหญิง รักเรียน", email: "somying@dev.com" },
@@ -31,9 +34,30 @@ const USERS = [
 ];
 
 function App() {
+  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [favorites, setFavorites] = useState([]);
+
+  function handleToggleFavorite(postId) {
+    setFavorites((prev) =>
+      prev.includes(postId)
+        ? prev.filter((id) => id !== postId)
+        : [...prev, postId],
+    );
+  }
+
+  function handleAddPost({ title, body }) {
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+
+    setPosts((prev) => [newPost, ...prev]);
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar favoriteCount={favorites.length} />
 
       <div
         style={{
@@ -45,12 +69,16 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
-          <PostList posts={POSTS} />
+          <AddPostForm onAddPost={handleAddPost} />
+
+          <PostList
+            posts={posts}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+          />
         </div>
 
-        {/* คอลัมน์ขวา: สมาชิก */}
         <div>
           <h2
             style={{
