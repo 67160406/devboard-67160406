@@ -82,6 +82,7 @@ function App() {
         <div>
           <h2
             style={{
+              color: "#2d3748",
               borderBottom: "2px solid #1e40af",
               paddingBottom: "0.5rem",
             }}
