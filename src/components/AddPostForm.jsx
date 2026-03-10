@@ -57,6 +57,18 @@ function AddPostForm({ onAddPost }) {
         }}
       />
 
+      {/* ตัวนับตัวอักษร */}
+      <div
+        style={{
+          textAlign: "right",
+          fontSize: "0.8rem",
+          color: remaining < 10 ? "#e53e3e" : "#718096",
+          marginBottom: "0.75rem",
+        }}
+      >
+        {title.length}/{maxTitle}
+      </div>
+
       {/* เนื้อหาโพสต์ */}
       <textarea
         placeholder="เนื้อหาโพสต์"
