@@ -51,7 +51,7 @@ function UserCard({ name, email }) {
         <div
           style={{
             fontWeight: "bold",
-            color: "#2d3748", // ✅ เพิ่มสีตรงนี้ แก้ปัญหาตัวหนังสือขาว
+            color: "#2d3748", // เพิ่มสีแก้ปัญหาตัวหนังสือขาว
           }}
         >
           {name}
