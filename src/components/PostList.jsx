@@ -1,15 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import PostCount from "./PostCount";
+import LoadingSpinner from "./LoadingSpinner";
 
-function PostList({ posts, favorites, onToggleFavorite }) {
-  // state เก็บคำค้นหา
-  const [search, setSearch] = useState("");
+function PostList({ favorites, onToggleFavorite }) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // state สำหรับ loading
+  const [error, setError] = useState(null); // state สำหรับ error
+  const [search, setSearch] = useState(""); // state เก็บคำค้นหา
+
+  useEffect(() => {
+    // ฟังก์ชัน async สำหรับ fetch ข้อมูลจาก API
+    async function fetchPosts() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+
+        // ถ้า response ไม่ ok ให้โยน error
+        if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
+
+        const data = await res.json();
+
+        // เก็บข้อมูล 20 รายการแรกลง state
+        setPosts(data.slice(0, 20)); // เอา 20 อัน
+      } catch (err) {
+        setError(err.message); // เก็บ error
+      } finally {
+        setLoading(false); // โหลดเสร็จ (ไม่ว่าจะสำเร็จหรือ error)
+      }
+    }
+
+    fetchPosts();
+  }, []); // [] = ทำครั้งเดียวตอน component โหลด
 
   // กรองโพสต์ตามคำค้น
   const filtered = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase()),
   );
+
+  // ✅ แสดง loading ก่อน
+  if (loading) return <LoadingSpinner />;
+  // ✅ แสดง error ถ้ามีปัญหา
+  if (error) {
+    return <p style={{ color: "red" }}>เกิดข้อผิดพลาด: {error}</p>;
+  }
 
   return (
     <div>
