@@ -9,29 +9,31 @@ function PostList({ favorites, onToggleFavorite }) {
   const [error, setError] = useState(null); // state สำหรับ error
   const [search, setSearch] = useState(""); // state เก็บคำค้นหา
 
-  useEffect(() => {
-    // ฟังก์ชัน async สำหรับ fetch ข้อมูลจาก API
-    async function fetchPosts() {
-      try {
-        setLoading(true);
-        setError(null);
+  // ⭐ แยก fetch ออกมาเป็น function (ใช้ซ้ำได้)
+  // ฟังก์ชัน async สำหรับ fetch ข้อมูลจาก API
+  async function fetchPosts() {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
 
-        // ถ้า response ไม่ ok ให้โยน error
-        if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
+      // ถ้า response ไม่ ok ให้โยน error
+      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
 
-        const data = await res.json();
+      const data = await res.json();
 
-        // เก็บข้อมูล 20 รายการแรกลง state
-        setPosts(data.slice(0, 20)); // เอา 20 อัน
-      } catch (err) {
-        setError(err.message); // เก็บ error
-      } finally {
-        setLoading(false); // โหลดเสร็จ (ไม่ว่าจะสำเร็จหรือ error)
-      }
+      // เก็บข้อมูล 20 รายการแรกลง state
+      setPosts(data.slice(0, 20)); // เอา 20 อัน
+    } catch (err) {
+      setError(err.message); // เก็บ error
+    } finally {
+      setLoading(false); // โหลดเสร็จ (ไม่ว่าจะสำเร็จหรือ error)
     }
+  }
 
+  // โหลดครั้งแรก
+  useEffect(() => {
     fetchPosts();
   }, []); // [] = ทำครั้งเดียวตอน component โหลด
 
@@ -49,18 +51,42 @@ function PostList({ favorites, onToggleFavorite }) {
 
   return (
     <div>
-      <h2
+      {/* หัวข้อ + ปุ่มโหลดใหม่ */}
+      <div
         style={{
-          color: "#2d3748",
-          borderBottom: "2px solid #1e40af",
-          paddingBottom: "0.5rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        โพสต์ล่าสุด
-      </h2>
+        <h2
+          style={{
+            color: "#2d3748",
+            borderBottom: "2px solid #1e40af",
+            paddingBottom: "0.5rem",
+          }}
+        >
+          โพสต์ล่าสุด
+        </h2>
+
+        {/* ⭐ ปุ่มโหลดใหม่ */}
+        <button
+          onClick={fetchPosts} // เรียก function เดิม
+          style={{
+            cursor: "pointer",
+            padding: "0.4rem 0.8rem",
+            borderRadius: "6px",
+            border: "1px solid #ffffff",
+            background: "#1e40af",
+            color: "#ffffff",
+          }}
+        >
+          🔄 โหลดใหม่
+        </button>
+      </div>
 
       {/* จำนวนโพสต์ */}
-      <PostCount count={posts.length} />
+      <PostCount count={filtered.length} />
 
       {/* ช่องค้นหา */}
       <input
