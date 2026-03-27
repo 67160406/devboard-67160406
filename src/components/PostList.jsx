@@ -3,7 +3,7 @@ import PostCard from "./PostCard";
 import PostCount from "./PostCount";
 import LoadingSpinner from "./LoadingSpinner";
 
-function PostList({ favorites, onToggleFavorite }) {
+function PostList({ favorites = [], onToggleFavorite = () => {} }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // state สำหรับ loading
   const [error, setError] = useState(null); // state สำหรับ error
@@ -38,8 +38,8 @@ function PostList({ favorites, onToggleFavorite }) {
   }, []); // [] = ทำครั้งเดียวตอน component โหลด
 
   // กรองโพสต์ตามคำค้น
-  const filtered = posts.filter((post) =>
-    post.title.toLowerCase().includes(search.toLowerCase()),
+  const filtered = posts.filter(
+    (post) => (post?.title || "").toLowerCase().includes(search.toLowerCase()), // ✅ กัน title undefined
   );
 
   // ✅ แสดง loading ก่อน
@@ -50,7 +50,7 @@ function PostList({ favorites, onToggleFavorite }) {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: "1rem" }}>
       {/* หัวข้อ + ปุ่มโหลดใหม่ */}
       <div
         style={{
@@ -113,14 +113,21 @@ function PostList({ favorites, onToggleFavorite }) {
       )}
 
       {/* แสดงโพสต์ */}
-      {filtered.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          isFavorite={favorites.includes(post.id)}
-          onToggleFavorite={() => onToggleFavorite(post.id)}
-        />
-      ))}
+      {filtered.map((post) => {
+        const isFavorite =
+          Array.isArray(favorites) && post?.id != null
+            ? favorites.includes(post.id) // ✅ กัน undefined
+            : false;
+
+        return (
+          <PostCard
+            key={post.id}
+            post={post}
+            isFavorite={isFavorite}
+            onToggleFavorite={() => onToggleFavorite(post.id)}
+          />
+        );
+      })}
     </div>
   );
 }

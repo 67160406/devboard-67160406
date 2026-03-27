@@ -24,7 +24,10 @@ function PostDetailPage() {
 
   if (loading) return <LoadingSpinner />;
 
-  const isFavorite = favorites.includes(post.id);
+  const isFavorite =
+    Array.isArray(favorites) && post?.id != null
+      ? favorites.includes(post.id)
+      : false;
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto", padding: "0 1rem" }}>

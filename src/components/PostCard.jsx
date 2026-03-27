@@ -5,35 +5,41 @@ import CommentList from "./CommentList";
 
 function PostCard({ post }) {
   const { favorites, toggleFavorite } = useFavorites();
-  const isFavorite = favorites.includes(post.id);
   const [showComments, setShowComments] = useState(false);
+
+  const isFavorite =
+    Array.isArray(favorites) && post?.id != null
+      ? favorites.includes(post.id)
+      : false;
 
   return (
     <div
       style={{
         border: "1px solid #e2e8f0",
-        borderRadius: "8px",
+        borderRadius: "12px",
         padding: "1rem",
         marginBottom: "1rem",
-        background: "white",
+        background: "#ffffff",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+        transition: "0.2s",
       }}
     >
       <h3 style={{ margin: "0 0 0.5rem" }}>
         <Link
-          to={`/posts/${post.id}`}
+          to={`/posts/${post?.id}`}
           style={{ color: "#1e40af", textDecoration: "none" }}
         >
-          {post.title}
+          {post?.title}
         </Link>
       </h3>
+
       <p style={{ margin: "0 0 0.75rem", color: "#4a5568", lineHeight: 1.6 }}>
-        {post.body}
+        {post?.body}
       </p>
 
       <div style={{ display: "flex", gap: "0.5rem" }}>
-        {/* ปุ่มถูกใจ */}
         <button
-          onClick={() => toggleFavorite(post.id)}
+          onClick={() => toggleFavorite(post?.id)}
           style={{
             background: "none",
             border: "none",
@@ -47,7 +53,6 @@ function PostCard({ post }) {
           {isFavorite ? "❤️" : "🤍"}
         </button>
 
-        {/* ปุ่มดูความคิดเห็น */}
         <button
           onClick={() => setShowComments((prev) => !prev)}
           style={{
@@ -64,8 +69,7 @@ function PostCard({ post }) {
         </button>
       </div>
 
-      {/* แสดง comments เมื่อกด — fetch เกิดขึ้นตอนนี้ */}
-      {showComments && <CommentList postId={post.id} />}
+      {showComments && post?.id && <CommentList postId={post.id} />}
     </div>
   );
 }
